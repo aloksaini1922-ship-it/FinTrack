@@ -49,7 +49,7 @@ public class TransactionServlet extends HttpServlet {
             LocalDate date=LocalDate.parse(req.getParameter("transactionDate"));
             if ((! "INCOME".equals(type) && ! "EXPENSE".equals(type)) || category.isBlank() || description.isBlank() || amount.signum()<=0) throw new IllegalArgumentException();
             try (Connection c=DB.getConnection(); PreparedStatement ps=c.prepareStatement("INSERT INTO transactions(user_id,type,category,description,amount,transaction_date) VALUES(?,?,?,?,?,?)")) {
-                ps.setLong(1,userId); ps.setString(2,type); ps.setString(3,category); ps.setString(4,description); ps.setBigDecimal(5,amount); ps.setDate(6,Date.valueOf(date)); ps.executeUpdate();
+                ps.setLong(1,userId); ps.setString(2,type); ps.setString(3,category); ps.setString(4,description); ps.setBigDecimal(5,amount); ps.setDate(6,java.sql.Date.valueOf(date)); ps.executeUpdate();
             }
             resp.sendRedirect(req.getContextPath()+"/dashboard");
         } catch (IllegalArgumentException | NullPointerException ex) {
