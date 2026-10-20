@@ -13,10 +13,10 @@ public class GoalServlet extends HttpServlet{
   try(Connection c=DB.getConnection()){
    if("delete".equals(action)){try(PreparedStatement p=c.prepareStatement("DELETE FROM savings_goals WHERE id=? AND user_id=?")){p.setLong(1,Long.parseLong(req.getParameter("id")));p.setLong(2,uid);p.executeUpdate();}}
    else if("save".equals(action)){BigDecimal target=new BigDecimal(req.getParameter("target")),saved=new BigDecimal(req.getParameter("saved"));String title=req.getParameter("title").trim();String rawDate=req.getParameter("targetDate");if(title.isEmpty()||target.signum()<=0||saved.signum()<0||saved.compareTo(target)>0)throw new IllegalArgumentException();
-    try(PreparedStatement p=c.prepareStatement("INSERT INTO savings_goals(user_id,title,target_amount,saved_amount,target_date) VALUES(?,?,?,?,?)")){p.setLong(1,uid);p.setString(2,title);p.setBigDecimal(3,target);p.setBigDecimal(4,saved);if(rawDate==null||rawDate.isBlank())p.setNull(5,Types.DATE);else p.setDate(5,Date.valueOf(LocalDate.parse(rawDate)));p.executeUpdate();}
+    try(PreparedStatement p=c.prepareStatement("INSERT INTO savings_goals(user_id,title,target_amount,saved_amount,target_date) VALUES(?,?,?,?,?)")){p.setLong(1,uid);p.setString(2,title);p.setBigDecimal(3,target);p.setBigDecimal(4,saved);if(rawDate==null||rawDate.isBlank())p.setNull(5,Types.DATE);else p.setDate(5,java.sql.Date.valueOf(LocalDate.parse(rawDate)));p.executeUpdate();}
    }else{resp.sendError(400,"Unknown action");return;}
    resp.sendRedirect(req.getContextPath()+"/goals");
-  }catch(NumberFormatException|IllegalArgumentException e){resp.sendError(400,"Please enter valid goal details.");}catch(SQLException e){throw new ServletException(e);}
+  }catch(IllegalArgumentException e){resp.sendError(400,"Please enter valid goal details.");}catch(SQLException e){throw new ServletException(e);}
  }
  private Long uid(HttpServletRequest q){HttpSession s=q.getSession(false);Object v=s==null?null:s.getAttribute("userId");return v instanceof Long?(Long)v:null;}
 }
