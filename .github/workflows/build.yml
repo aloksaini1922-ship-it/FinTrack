@@ -1,0 +1,27 @@
+name: Build FinTrack
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - name: Build WAR
+        run: mvn --batch-mode clean package
+      - name: Upload WAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: FinTrack-WAR
+          path: target/FinTrack.war
+          if-no-files-found: error
