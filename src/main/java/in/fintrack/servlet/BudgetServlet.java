@@ -19,7 +19,7 @@ public class BudgetServlet extends HttpServlet{
   String cat=req.getParameter("category");try{BigDecimal amount=new BigDecimal(req.getParameter("limit"));LocalDate month=LocalDate.parse(req.getParameter("month")+"-01");
    if(cat==null||cat.trim().isEmpty()||amount.signum()<=0)throw new IllegalArgumentException();
    try(Connection c=DB.getConnection();PreparedStatement p=c.prepareStatement("INSERT INTO budgets(user_id,category,monthly_limit,month_start) VALUES(?,?,?,?) ON DUPLICATE KEY UPDATE monthly_limit=VALUES(monthly_limit)")){
-    p.setLong(1,uid);p.setString(2,cat.trim());p.setBigDecimal(3,amount);p.setDate(4,Date.valueOf(month));p.executeUpdate();
+    p.setLong(1,uid);p.setString(2,cat.trim());p.setBigDecimal(3,amount);p.setDate(4,java.sql.Date.valueOf(month));p.executeUpdate();
    }resp.sendRedirect(req.getContextPath()+"/budgets");
   }catch(IllegalArgumentException|NullPointerException e){resp.sendError(400,"Enter a valid category, amount and month.");}catch(SQLException e){throw new ServletException(e);}
  }
