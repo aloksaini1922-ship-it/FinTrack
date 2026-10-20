@@ -1,0 +1,7 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Sign in · FinTrack</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"><link rel="stylesheet" href="assets/css/style.css"></head><body class="auth-bg">
+<div class="auth-card"><a class="brand" href="login.jsp"><span class="brand-mark">F</span> FinTrack</a><p class="eyebrow mt-4">YOUR MONEY, IN FOCUS</p><h1>Welcome back.</h1><p class="muted">Sign in to see your financial picture.</p>
+<% if ("1".equals(request.getParameter("registered"))) { %><div class="alert alert-success">Account created. You can sign in now.</div><% } %>
+<% if (request.getAttribute("error") != null) { %><div class="alert alert-danger"><%= request.getAttribute("error") %></div><% } %>
+<form method="post" action="login" class="mt-4"><label class="form-label">Email address</label><input class="form-control" type="email" name="email" required autocomplete="email"><label class="form-label mt-3">Password</label><input class="form-control" type="password" name="password" required autocomplete="current-password"><button class="btn btn-fin w-100 mt-4">Sign in <span aria-hidden="true">→</span></button></form>
+<p class="text-center mt-4 mb-0 muted">New to FinTrack? <a href="register.jsp">Create an account</a></p><p class="fine-print mt-4">Built for FinTrack Trio · Galgotias University</p></div></body></html>
